@@ -3,111 +3,734 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kashemir Beauty Studio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Kashemir Beauty Studio - Premium Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --studio-green: #3a703b; --studio-gold: #c5a880; }
-        body.day-theme { --bg-color: #faf5ed; --text-main: #1a1a1a; --text-title: #3a703b; --nav-bg: rgba(250, 245, 237, 0.95); }
-        body.night-theme { --bg-color: #112212; --text-main: #faf5ed; --text-title: #c5a880; --nav-bg: rgba(17, 34, 18, 0.95); }
-        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding-bottom: 100px; transition: 0.5s; }
+        :root {
+            /* الألوان الأساسية والثيم الفاتح الدائم */
+            --studio-green: #3a703b; 
+            --studio-beige: #e5d3b3; 
+            --studio-gold: #c5a880;
+            --text-dark: #1a1a1a;
+            --text-muted: #555555;
+            --fluid-transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            --bg-color: #faf5ed;
+            --card-bg: rgba(255, 255, 255, 0.45);
+            --text-main: #1a1a1a;
+            --text-title: #3a703b;
+            --border-color: rgba(197, 168, 128, 0.35);
+            --nav-bg: rgba(250, 245, 237, 0.92);
+            --shadow-color: rgba(31, 38, 135, 0.04);
+            --particle-color: rgba(197, 168, 128, 0.6);
+            --glass-bg: rgba(250, 245, 237, 0.65);
+        }
+
+        html { scroll-behavior: smooth; scroll-padding-top: 130px; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color); color: var(--text-main);
+            margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden; transition: var(--fluid-transition);
+            padding-bottom: 140px; 
+        }
+
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #faf5ed; display: flex; justify-content: center; align-items: center;
+            z-index: 9999; transition: opacity 1.2s ease-out, visibility 1.2s;
+        }
+        .splash-logo { width: 250px; max-width: 80%; animation: pulse-logo 2s infinite alternate; }
+        @keyframes pulse-logo { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.05); opacity: 1; } }
+
+        header { width: 100%; text-align: center; padding: 40px 0 15px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px;}
+        .greeting-text { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--text-title); letter-spacing: 3px; text-transform: uppercase; font-weight: 600; margin-bottom: 5px; }
+        .guest-subtitle { font-size: 0.9rem; color: var(--studio-gold); letter-spacing: 2px; margin-bottom: 25px; font-weight: 500; font-style: italic; }
+        .brand-logo-container { display: flex; justify-content: center; align-items: center; margin-bottom: 10px; }
+        .main-logo { width: 240px; max-width: 85%; height: auto; object-fit: contain; }
+
+        .mood-bar-container {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            z-index: 800; padding: 10px 15px; border-radius: 50px;
+            border: 1px solid var(--studio-gold);
+            box-shadow: 0 10px 35px var(--shadow-color), inset 0 0 10px rgba(255,255,255,0.1);
+            display: flex; flex-direction: column; align-items: center;
+            width: 90%; max-width: 500px;
+        }
+        .mood-title { display: none; } 
+        .mood-buttons { 
+            display: flex; justify-content: center; gap: 8px; width: 100%;
+            overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .mood-buttons::-webkit-scrollbar { display: none; }
+        .mood-btn {
+            background: transparent; border: 1px solid transparent; color: var(--text-main);
+            padding: 8px 14px; border-radius: 25px; font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.4s ease;
+            white-space: nowrap; flex-shrink: 0;
+        }
+        .mood-btn.active, .mood-btn:hover { 
+            background: var(--studio-gold); color: white; 
+            box-shadow: 0 4px 15px rgba(197, 168, 128, 0.4); 
+        }
+
+        .container { width: 90%; max-width: 600px; padding-bottom: 40px; }
+
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 40px; }
+
+        .menu-card {
+            background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-radius: 95px 95px 25px 25px; padding: 12px; text-align: center;
+            box-shadow: 0 8px 32px var(--shadow-color); border: 1px solid var(--border-color);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); position: relative;
+        }
         
-        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .splash-logo { width: 200px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+        .menu-card.dimmed { opacity: 0.3; filter: grayscale(80%); transform: scale(0.95); pointer-events: none; }
+        .menu-card.spotlight { transform: translateY(-8px) scale(1.05); box-shadow: 0 15px 35px rgba(197, 168, 128, 0.4); border-color: var(--studio-gold); z-index: 10; }
 
-        header { text-align: center; padding: 40px 0; }
-        .main-logo { width: 200px; }
+        .menu-card:hover:not(.dimmed) { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(197, 168, 128, 0.15); border-color: var(--studio-gold); }
 
-        .container { width: 90%; max-width: 600px; margin: auto; }
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .menu-card { background: rgba(255,255,255,0.05); border: 1px solid var(--studio-gold); border-radius: 20px; padding: 15px; text-align: center; transition: 0.3s; }
-        .menu-card.dimmed { opacity: 0.2; filter: grayscale(1); }
-        .img-wrapper img { width: 100%; height: 120px; object-fit: cover; border-radius: 15px; }
+        .img-wrapper { width: 100%; height: 145px; border-radius: 120px 120px 20px 20px; overflow: hidden; background-color: rgba(0,0,0,0.05); }
+        .img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .menu-card:hover:not(.dimmed) .img-wrapper img { transform: scale(1.08); }
 
-        /* Floating Mood Bar */
-        .mood-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--nav-bg); backdrop-filter: blur(10px); padding: 10px 20px; border-radius: 50px; display: flex; gap: 10px; z-index: 900; border: 1px solid var(--studio-gold); }
-        .mood-btn { background: none; border: none; color: var(--text-main); font-size: 0.8rem; cursor: pointer; padding: 5px 10px; }
-        .mood-btn.active { color: var(--studio-gold); font-weight: bold; }
+        .menu-card h3 { font-size: 0.95rem; margin: 18px 0 12px; color: var(--text-main); font-weight: 500; letter-spacing: 1px; }
 
-        /* Cinematic Success Screen */
-        #successOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 10000; display: none; flex-direction: column; overflow-y: auto; padding: 20px; }
-        #cinematic-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-        .success-box { position: relative; z-index: 1; text-align: center; padding-top: 50px; }
+        .order-btn {
+            background-color: var(--studio-green); color: white; border: 1px solid transparent;
+            padding: 10px 20px; border-radius: 25px; cursor: pointer; width: 85%; font-size: 0.75rem; letter-spacing: 2px;
+            margin-bottom: 8px; font-weight: 500; box-shadow: 0 4px 10px rgba(52, 112, 59, 0.15);
+            position: relative; overflow: hidden; transition: all 0.3s;
+        }
+        .order-btn::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg); animation: shimmer 4s infinite;
+        }
+        @keyframes shimmer { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
+        .order-btn:hover { background-color: var(--bg-color); color: var(--text-title); border-color: var(--text-title); }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(17, 34, 18, 0.5); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: var(--bg-color); padding: 35px; border-radius: 30px; width: 85%; max-width: 380px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-main); transition: var(--fluid-transition); }
+        .modal-content h3 { color: var(--text-title); border-bottom: 1px solid var(--studio-gold); padding-bottom: 12px; margin-top: 0; margin-bottom: 25px; font-size: 1.25rem; font-weight: 600; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 9px; font-weight: 500; font-size: 0.8rem; opacity: 0.8; }
+        .form-group select, .form-group input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-main); outline: none; font-size: 0.88rem; font-family: 'Montserrat', sans-serif; box-sizing: border-box; }
+        .form-group select:focus, .form-group input:focus { border-color: var(--studio-gold); }
+        .modal-actions { display: flex; gap: 15px; margin-top: 30px; }
+        .confirm-btn, .cancel-btn { padding: 15px; border-radius: 14px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; }
+        .confirm-btn { background: var(--studio-green); color: white; flex: 2; box-shadow: 0 4px 12px rgba(52, 112, 59, 0.2); }
+        .cancel-btn { background: var(--studio-gold); color: white; flex: 1; }
+
+        #usualOrderBanner { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 450px; background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--studio-gold); border-radius: 20px; padding: 15px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; z-index: 900; transition: bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-sizing: border-box;}
+        .banner-text { font-size: 0.8rem; color: var(--text-main); line-height: 1.4; }
+        .banner-text strong { color: var(--text-title); display: block; font-size: 0.95rem; margin-top: 2px; }
+        .banner-btn { background: var(--studio-green); color: white; border: none; padding: 10px 18px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+
+        #conciergeCallBtn { position: fixed; bottom: 100px; right: 20px; z-index: 850; background: linear-gradient(135deg, var(--studio-gold), #b39369); color: white; border: none; width: 55px; height: 55px; border-radius: 50%; box-shadow: 0 4px 20px rgba(197, 168, 128, 0.4); cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #conciergeCallBtn:hover { transform: scale(1.1) rotate(15deg); }
+        #conciergeCallBtn svg { width: 26px; height: 26px; fill: white; }
+
+        #successOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 10000;
+            display: none; flex-direction: column; align-items: center;
+            opacity: 0; transition: opacity 0.5s ease;
+            overflow-y: auto; padding: 40px 0; 
+        }
         
-        #conciergeCallBtn { position: fixed; bottom: 30px; right: 20px; z-index: 850; background: var(--studio-gold); border-radius: 50%; width: 55px; height: 55px; border: none; color: white; transition: 0.3s; }
-        #conciergeCallBtn.shifted { bottom: 90px; }
-        
-        #usualOrderBanner { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); width: 90%; background: var(--nav-bg); padding: 15px; border-radius: 20px; border: 1px solid var(--studio-gold); z-index: 900; transition: 0.5s; }
+        #cinematic-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+        .success-box { text-align: center; transform: translateY(20px); transition: transform 0.5s ease; width: 90%; max-width: 420px; z-index: 2; position: relative; margin: auto; }
+        .success-overlay-active .success-box { transform: translateY(0); }
+        .success-logo { width: 180px; margin-bottom: 20px; filter: drop-shadow(0 4px 10px rgba(197, 168, 128, 0.2)); }
+        .icon-container { width: 100px; height: 100px; margin: 0 auto 15px; display: flex; justify-content: center; align-items: center; }
+        .success-title { font-family: 'Cinzel', serif; font-size: 1.3rem; color: var(--text-title); margin-bottom: 5px; font-weight: 600; }
+        .success-desc { font-size: 0.85rem; opacity: 0.8; margin-bottom: 20px; }
+
+        .magic-box { background: rgba(255,255,255,0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--studio-gold); border-radius: 20px; padding: 20px; margin-bottom: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .magic-compliment { font-size: 0.95rem; font-weight: 600; color: var(--text-title); margin-bottom: 8px; transition: opacity 0.4s ease; }
+        .magic-fortune { font-size: 0.85rem; font-style: italic; opacity: 0.9; line-height: 1.4; transition: opacity 0.4s ease; }
+        .more-compliment-btn { background: transparent; border: 1px solid var(--studio-gold); color: var(--studio-gold); padding: 8px 18px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; cursor: pointer; margin-top: 15px; transition: all 0.3s; display: inline-flex; align-items: center; gap: 5px; }
+        .more-compliment-btn:hover { background: var(--studio-gold); color: white; }
+
+        .feedback-widget { background: rgba(197, 168, 128, 0.1); padding: 15px; border-radius: 15px; margin-bottom: 25px; border: 1px dashed rgba(197, 168, 128, 0.3); }
+        .feedback-title { font-size: 0.8rem; font-weight: 500; margin-bottom: 10px; color: var(--text-main); }
+        .stars-container { display: flex; justify-content: center; gap: 8px; }
+        .star { font-size: 1.6rem; cursor: pointer; color: #ccc; transition: color 0.3s, transform 0.2s; }
+        .star.active { color: #f39c12; transform: scale(1.1); }
+
+        .entertainment-box { display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%; padding-bottom: 40px;}
+        .vk-btn { background: linear-gradient(45deg, #2787F5, #1B6DC1); color: white; text-decoration: none; padding: 12px 25px; border-radius: 25px; font-size: 0.85rem; font-weight: 500; letter-spacing: 1px; width: 80%; box-shadow: 0 4px 15px rgba(39, 135, 245, 0.3); }
+        .insta-btn { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; text-decoration: none; padding: 12px 25px; border-radius: 25px; font-size: 0.85rem; font-weight: 500; letter-spacing: 1px; width: 80%; box-shadow: 0 4px 15px rgba(220, 39, 67, 0.2); }
+        .close-success-btn { background: transparent; border: none; color: var(--text-muted); font-size: 0.75rem; cursor: pointer; margin-top: 10px; text-decoration: underline; }
+
+        .progress-bar-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 4px; background: rgba(0,0,0,0.05); z-index: 10001; }
+        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--studio-gold), #ffe2aa, var(--studio-gold)); background-size: 200% 100%; animation: gradientFlow 2s linear infinite; transition: width 0.1s linear; }
+        @keyframes gradientFlow { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+        .hot-icon svg { width: 70px; height: 70px; fill: none; stroke: var(--studio-gold); stroke-width: 2; }
+        .steam { stroke: var(--studio-gold); stroke-width: 2; fill: none; stroke-linecap: round; animation: rise 2s infinite ease-in-out; }
+        .steam:nth-child(2) { animation-delay: 0.5s; }
+        .steam:nth-child(3) { animation-delay: 1s; }
+        @keyframes rise { 0% { opacity: 0; transform: translateY(5px); } 50% { opacity: 1; } 100% { opacity: 0; transform: translateY(-15px); } }
+
+        .cold-icon svg { width: 70px; height: 70px; fill: none; stroke: var(--studio-green); stroke-width: 2; }
+        .ice { animation: float-ice 3s infinite ease-in-out; }
+        .ice:nth-child(2) { animation-delay: 1.5s; }
+        @keyframes float-ice { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+        @media (max-width: 480px) {
+            .menu-grid { gap: 15px; }
+            .menu-card { border-radius: 80px 80px 20px 20px; }
+            .img-wrapper { height: 135px; border-radius: 70px 70px 12px 12px; }
+            .main-logo { width: 210px; }
+        }
     </style>
 </head>
 <body>
 
-<div id="splash-screen"><img src="https://i.postimg.cc/tJCcCrMc/Qaqa.png" class="splash-logo"></div>
+<div id="splash-screen">
+    <img src="https://i.postimg.cc/tJCcCrMc/Qaqa.png" alt="Kashemir Logo Splash" class="splash-logo">
+</div>
+
+<button id="conciergeCallBtn" onclick="openAdminCallModal()" title="Позвать администратора">
+    <svg viewBox="0 0 24 24">
+        <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+    </svg>
+</button>
 
 <header>
-    <div id="dynamic-greeting"></div>
-    <img src="https://i.postimg.cc/vHjbR9Tm/Bez-fona-cvetnoj-vertikal'nyj-1.png" class="main-logo">
+    <div id="dynamic-greeting" class="greeting-text"></div>
+    <div class="guest-subtitle">Наша любимая гостья ✨</div>
+    <div class="brand-logo-container">
+        <img src="https://i.postimg.cc/vHjbR9Tm/Bez-fona-cvetnoj-vertikal'nyj-1.png" alt="Kashemir Logo" class="main-logo">
+    </div>
 </header>
 
 <div class="container">
     <div class="menu-grid" id="menuGrid">
-        <div class="menu-card" data-mood="energy"><img src="https://i.postimg.cc/CMcwN9VZ/IMG-0847.jpg"><h3>Латте</h3><button onclick="order('Латте')">ЗАКАЗАТЬ</button></div>
-        <div class="menu-card" data-mood="relax"><img src="https://i.postimg.cc/CMcwN9VG/IMG-0852.jpg"><h3>Чай</h3><button onclick="order('Чай')">ЗАКАЗАТЬ</button></div>
-        <div class="menu-card" data-mood="cool"><img src="https://i.postimg.cc/MT0D2WP4/IMG-0923.png"><h3>Мохито</h3><button onclick="order('Мохито')">ЗАКАЗАТЬ</button></div>
+        <div class="menu-card" data-mood="energy">
+            <div class="img-wrapper"><img src="https://i.postimg.cc/CMcwN9VZ/IMG-0847.jpg" alt="Латте"></div>
+            <h3>Латте</h3>
+            <button class="order-btn" onclick="openModal('Латте')">ЗАКАЗАТЬ</button>
+        </div>
+        <div class="menu-card" data-mood="energy">
+            <div class="img-wrapper"><img src="https://i.postimg.cc/MZ9zDg8y/IMG-0848.jpg" alt="Капучино"></div>
+            <h3>Капучино</h3>
+            <button class="order-btn" onclick="openModal('Капучино')">ЗАКАЗАТЬ</button>
+        </div>
+        <div class="menu-card" data-mood="energy">
+            <div class="img-wrapper"><img src="https://i.postimg.cc/NGdQ4ZwR/IMG-0849.jpg" alt="Американо"></div>
+            <h3>Американо</h3>
+            <button class="order-btn" onclick="openModal('Американо')">ЗАКАЗАТЬ</button>
+        </div>
+        <div class="menu-card" data-mood="energy">
+            <div class="img-wrapper"><img src="https://i.postimg.cc/ryfqJ7LG/IMG-0850.jpg" alt="Мокко"></div>
+            <h3>Мокко</h3>
+            <button class="order-btn" onclick="openModal('Мокко')">ЗАКАЗАТЬ</button>
+        </div>
+        <div class="menu-card" data-mood="relax">
+            <div class="img-wrapper"><img src="https://i.postimg.cc/CMcwN9VG/IMG-0852.jpg" alt="Зеленый чай"></div>
+            <h3>Зеленый чай</h3>
+            <button class="order-btn" onclick="openModal('Зеленый чай')">ЗАКАЗАТЬ</button>
+        </div>
+        <div class="menu-card" data-mood="relax">
+            <div class="img-wrapper"><img src="https://i.postimg.cc/sD8sFSXk/IMG-0853.jpg" alt="Черный чай"></div>
+            <h3>Черный чай</h3>
+            <button class="order-btn" onclick="openModal('Черный чай')">ЗАКАЗАТЬ</button>
+        </div>
+        <div class="menu-card" data-mood="cool">
+            <div class="img-wrapper"><img src="https://i.postimg.cc/RV84rfhz/IMG-0854.jpg" alt="Айс Латте"></div>
+            <h3>Айс Латте</h3>
+            <button class="order-btn" onclick="openModal('Айс Латте')">ЗАКАЗАТЬ</button>
+        </div>
+        <div class="menu-card" data-mood="cool">
+            <div class="img-wrapper"><img src="https://i.postimg.cc/PrcTGZJx/IMG-0856.png" alt="Айс Испанский Латте"></div>
+            <h3>Айс Испанский Латте</h3>
+            <button class="order-btn" onclick="openModal('Айс Испанский Латте')">ЗАКАЗАТЬ</button>
+        </div>
+        <div class="menu-card" data-mood="cool">
+            <div class="img-wrapper"><img src="https://i.postimg.cc/MT0D2WP4/IMG-0923.png" alt="Мохито"></div>
+            <h3>Мохито</h3>
+            <button class="order-btn" onclick="openModal('Мохито')">ЗАКАЗАТЬ</button>
+        </div>
+        <div class="menu-card" data-mood="cool">
+            <div class="img-wrapper"><img src="https://i.postimg.cc/rFbM6WsT/IMG-0858.jpg" alt="Вода с газом"></div>
+            <h3>Вода (с газом)</h3>
+            <button class="order-btn" onclick="openModal('Вода (с газом)')">ЗАКАЗАТЬ</button>
+        </div>
+        <div class="menu-card" data-mood="relax">
+            <div class="img-wrapper"><img src="https://i.postimg.cc/rFbM6WsT/IMG-0858.jpg" alt="Вода без газа"></div>
+            <h3>Вода (без газа)</h3>
+            <button class="order-btn" onclick="openModal('Вода (без газа)')">ЗАКАЗАТЬ</button>
+        </div>
     </div>
 </div>
 
-<div class="mood-bar">
-    <button class="mood-btn active" onclick="setMood('all', this)">Все</button>
-    <button class="mood-btn" onclick="setMood('relax', this)">Релакс</button>
-    <button class="mood-btn" onclick="setMood('energy', this)">Энергия</button>
-    <button class="mood-btn" onclick="setMood('cool', this)">Прохлада</button>
+<div class="mood-bar-container">
+    <div class="mood-title">Выберите свое настроение</div>
+    <div class="mood-buttons">
+        <button class="mood-btn active" onclick="setMood('all', this)">Все меню</button>
+        <button class="mood-btn" onclick="setMood('relax', this)">Абсолютный Релакс</button>
+        <button class="mood-btn" onclick="setMood('energy', this)">Заряд Энергии</button>
+        <button class="mood-btn" onclick="setMood('cool', this)">Прохлада</button>
+    </div>
 </div>
 
-<button id="conciergeCallBtn" onclick="alert('Администратор скоро будет!')">🛎️</button>
-<div id="usualOrderBanner">Повторить заказ? <button onclick="alert('Заказ отправлен!')">ДА</button></div>
+<div id="usualOrderBanner">
+    <div class="banner-text">✨ Повторить ваш любимый заказ:<strong id="usualDrinkName">Напиток</strong></div>
+    <button class="banner-btn" onclick="triggerUsualOrder()">ДА!</button>
+</div>
+
+<!-- نافذة الطلب -->
+<div id="orderModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalItemName">Название</h3>
+        <div class="form-group"><label>Введите ваше ФИО:</label><input type="text" id="customerName" placeholder="Иванов Иван"></div>
+        <div class="form-group"><label>Имя мастера:</label><input type="text" id="masterName" placeholder="Например: Анна"></div>
+        <div id="sugarGroup" class="form-group">
+            <label>Сахар / Добавки:</label>
+            <select id="sugarOption">
+                <option value="Без сахара">Без сахара</option>
+                <option value="1 ложка">1 ложка</option>
+                <option value="2 ложки">2 ложки</option>
+                <option value="3 ложки">3 ложки</option>
+                <option value="Конфета">Конфета (к напитку)</option>
+            </select>
+        </div>
+        <div id="syrupGroup" class="form-group">
+            <label>Сироп:</label>
+            <select id="syrupOption">
+                <option value="Без сиропа">Без сиропа</option>
+                <option value="Шоколад">Шоколад</option>
+                <option value="Орех">Орех</option>
+                <option value="Карамель">Карамель</option>
+                <option value="Ваниль">Ваниль</option>
+            </select>
+        </div>
+        <div class="modal-actions">
+            <button class="confirm-btn" id="submitBtn" onclick="sendOrder()">ПОДТВЕРДИТЬ</button>
+            <button class="cancel-btn" onclick="closeModal()">ОТМЕНА</button>
+        </div>
+    </div>
+</div>
+
+<div id="adminModal" class="modal">
+    <div class="modal-content">
+        <h3>Позвать администратора 🛎️</h3>
+        <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 20px; line-height: 1.4;">Если вам нужна помощь, чашка воды или дополнительный сервис, заполните поле и нажмите кнопку ниже.</p>
+        <div class="form-group">
+            <label>Ваше ФИО:</label>
+            <input type="text" id="adminCustomerName" placeholder="Иванов Иван">
+        </div>
+        <div class="modal-actions">
+            <button class="confirm-btn" id="callAdminConfirmBtn" onclick="sendAdminAlert()">ВЫЗВАТЬ</button>
+            <button class="cancel-btn" onclick="closeAdminModal()">ОТМЕНА</button>
+        </div>
+    </div>
+</div>
 
 <div id="successOverlay">
     <canvas id="cinematic-canvas"></canvas>
+    
     <div class="success-box">
-        <img src="https://i.postimg.cc/vHjbR9Tm/Bez-fona-cvetnoj-vertikal'nyj-1.png" style="width:150px">
-        <h1>Ваш напиток готовится</h1>
-        <button onclick="document.getElementById('successOverlay').style.display='none'">Вернуться</button>
+        <img src="https://i.postimg.cc/vHjbR9Tm/Bez-fona-cvetnoj-vertikal'nyj-1.png" alt="Kashemir Logo" class="success-logo">
+        <div id="dynamicIcon" class="icon-container"></div>
+        <div class="success-title">Ваш напиток уже готовится ✨</div>
+        <div class="success-desc">Пожалуйста, ожидайте. Мы принесем его вам очень скоро!</div>
+        
+        <div class="magic-box">
+            <div id="magicCompliment" class="magic-compliment">Вы прекрасны!</div>
+            <div id="magicFortune" class="magic-fortune">Сегодня ваш день.</div>
+            <button class="more-compliment-btn" onclick="generateNewCompliment()">Хочу еще комплимент 🤍</button>
+        </div>
+
+        <div class="feedback-widget" id="feedbackWidget">
+            <div class="feedback-title" id="feedbackTitle">Оцените качество нашего сервиса (1-5 ⭐️)</div>
+            <div class="stars-container">
+                <span class="star" onclick="rateService(1)">★</span>
+                <span class="star" onclick="rateService(2)">★</span>
+                <span class="star" onclick="rateService(3)">★</span>
+                <span class="star" onclick="rateService(4)">★</span>
+                <span class="star" onclick="rateService(5)">★</span>
+            </div>
+        </div>
+
+        <div class="entertainment-box">
+            <a href="https://vk.ru/kashemir_nn" target="_blank" class="vk-btn">Мы ВКонтакте 💙</a>
+            <a href="https://instagram.com/" target="_blank" class="insta-btn">Наш Instagram 🤍</a>
+            <button onclick="closeSuccess()" class="close-success-btn">Скрыть экран ожидания</button>
+        </div>
+    </div>
+    
+    <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="successProgressBar"></div>
     </div>
 </div>
 
 <script>
+    const BOT_TOKEN = '8115112793:AAETXQ7Yie5iNwQ-hUjEFsFiGGO9jVkVefk';
+    const CHAT_ID = '5052816790';
+
+    const menuConfig = {
+        'Латте': { sugar: true, syrup: true, type: 'hot' },
+        'Капучино': { sugar: true, syrup: true, type: 'hot' },
+        'Американо': { sugar: true, syrup: true, type: 'hot' },
+        'Мокко': { sugar: true, syrup: true, type: 'hot' },
+        'Зеленый чай': { sugar: true, syrup: false, type: 'hot' },
+        'Черный чай': { sugar: true, syrup: false, type: 'hot' },
+        'Айс Латте': { sugar: true, syrup: true, type: 'cold' },
+        'Айс Испанский Латте': { sugar: true, syrup: true, type: 'cold' },
+        'Мохито': { sugar: true, syrup: false, type: 'cold' },
+        'Вода (с газом)': { sugar: false, syrup: false, type: 'cold' },
+        'Вода (без газа)': { sugar: false, syrup: false, type: 'cold' }
+    };
+
+    // عبارات الإطراء الجديدة المخصصة لثقافة نيجني نوفغورود
+    const compliments = [
+        "Ваша красота сияет ярче, чем знаменитые нижегородские закаты 🌅",
+        "Истинная нижегородская утонченность — это про вас 🤍",
+        "Вы украшаете наш любимый Нижний своей улыбкой ☀️",
+        "Ваша энергия такая же притягательная, как слияние Оки и Волги 🌊",
+        "Стиль и элегантность — ваша визитная карточка в столице закатов ✨",
+        "В вас есть та самая стать и грация, которой славятся волжанки 👑"
+    ];
+
+    // التوقعات والأمنيات الجديدة المخصصة لثقافة المدينة
+    const fortunes = [
+        "Идеальный день для красивого променада по Верхневолжской набережной 🤍",
+        "Сегодня вечером вас ждет особенный момент. Столица закатов приготовила сюрприз 🌅",
+        "Ваш новый образ от Kashemir станет главным событием на Покровке сегодня 💅",
+        "Этот напиток зарядит вас энергией для покорения любых высот — даже Чкаловской лестницы! ☕️",
+        "Как могучая Волга, в вашу жизнь скоро ворвутся прекрасные события 🌊",
+        "Атмосфера нашего родного города сулит вам сегодня невероятную удачу ✨"
+    ];
+
+    let selectedItem = '';
+    let successTimeout;
+    let progressInterval;
+    let animationFrameId;
+
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.getElementById('splash-screen').style.opacity = '0';
+            setTimeout(() => document.getElementById('splash-screen').style.display = 'none', 1200); 
+            checkUsualOrder();
+        }, 3000); 
+    });
+
     const hour = new Date().getHours();
-    document.body.className = (hour >= 6 && hour < 18) ? 'day-theme' : 'night-theme';
-    
+    document.getElementById('dynamic-greeting').innerText = 
+        (hour >= 0 && hour < 12) ? 'Доброе утро,' : 
+        (hour >= 12 && hour < 18) ? 'Добрый день,' : 'Добрый вечер,';
+
     function setMood(mood, btn) {
         document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        document.querySelectorAll('.menu-card').forEach(card => {
-            card.classList.toggle('dimmed', mood !== 'all' && card.dataset.mood !== mood);
+
+        const cards = document.querySelectorAll('.menu-card');
+        cards.forEach(card => {
+            if (mood === 'all') {
+                card.classList.remove('dimmed');
+                card.classList.remove('spotlight');
+            } else {
+                if (card.dataset.mood === mood) {
+                    card.classList.remove('dimmed');
+                    card.classList.add('spotlight');
+                    setTimeout(() => card.classList.remove('spotlight'), 1500);
+                } else {
+                    card.classList.add('dimmed');
+                    card.classList.remove('spotlight');
+                }
+            }
         });
     }
 
-    function order(item) {
-        document.getElementById('successOverlay').style.display = 'flex';
-        initParticles();
-        document.getElementById('conciergeCallBtn').classList.add('shifted');
-        setTimeout(() => document.getElementById('usualOrderBanner').style.bottom = '20px', 1000);
+    function checkUsualOrder() {
+        const savedDrink = localStorage.getItem('kash_drink');
+        if (savedDrink && menuConfig[savedDrink]) {
+            document.getElementById('usualDrinkName').innerText = savedDrink;
+            setTimeout(() => { 
+                document.getElementById('usualOrderBanner').style.bottom = '110px';
+                document.getElementById('conciergeCallBtn').style.bottom = '180px';
+            }, 500);
+        }
     }
 
-    function initParticles() {
+    function triggerUsualOrder() {
+        const savedDrink = localStorage.getItem('kash_drink');
+        openModal(savedDrink, true); 
+        resetBannerAndButton();
+    }
+
+    function resetBannerAndButton() {
+        document.getElementById('usualOrderBanner').style.bottom = '-100px';
+        document.getElementById('conciergeCallBtn').style.bottom = '100px';
+    }
+
+    function openModal(item, isFromBanner = false) {
+        selectedItem = item;
+        const config = menuConfig[item];
+        document.getElementById('modalItemName').innerText = item;
+        document.getElementById('sugarGroup').style.display = config.sugar ? 'block' : 'none';
+        document.getElementById('syrupGroup').style.display = config.syrup ? 'block' : 'none';
+        document.getElementById('customerName').value = localStorage.getItem('kash_name') || '';
+        document.getElementById('masterName').value = localStorage.getItem('kash_master') || '';
+        
+        if (isFromBanner) {
+            if (config.sugar) document.getElementById('sugarOption').value = localStorage.getItem('kash_sugar') || 'Без сахара';
+            if (config.syrup) document.getElementById('syrupOption').value = localStorage.getItem('kash_syrup') || 'Без сиропа';
+        } else {
+            document.getElementById('sugarOption').value = 'Без сахара';
+            document.getElementById('syrupOption').value = 'Без сиропа';
+        }
+        document.getElementById('orderModal').style.display = 'flex';
+        resetBannerAndButton(); 
+    }
+
+    function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
+    
+    function openAdminCallModal() { 
+        document.getElementById('adminCustomerName').value = localStorage.getItem('kash_name') || '';
+        document.getElementById('adminModal').style.display = 'flex'; 
+    }
+    function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
+
+    function triggerHaptic() { if (navigator.vibrate) { navigator.vibrate(60); } }
+
+    function playAsmrSound() {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, ctx.currentTime); 
+            osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15); 
+            osc.frequency.exponentialRampToValueAtTime(783.99, ctx.currentTime + 0.3); 
+            gain.gain.setValueAtTime(0.08, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.start(); osc.stop(ctx.currentTime + 0.8);
+        } catch(e) {}
+    }
+
+    function sendOrder() {
+        const fullname = document.getElementById('customerName').value.trim();
+        const masterName = document.getElementById('masterName').value.trim();
+        const sugar = document.getElementById('sugarOption').value;
+        const syrup = document.getElementById('syrupOption').value;
+        const config = menuConfig[selectedItem];
+
+        const nameParts = fullname.split(/\s+/);
+        if (nameParts.length < 2 || nameParts.some(part => part.length < 2)) {
+            alert('Пожалуйста, введите полное ФИО (минимум два слова).'); return;
+        }
+        if (!masterName) { alert('Пожалуйста, введите имя мастера!'); return; }
+
+        triggerHaptic(); 
+
+        localStorage.setItem('kash_name', fullname);
+        localStorage.setItem('kash_master', masterName);
+        localStorage.setItem('kash_drink', selectedItem);
+        if (config.sugar) localStorage.setItem('kash_sugar', sugar);
+        if (config.syrup) localStorage.setItem('kash_syrup', syrup);
+
+        let text = `✨ **Новый заказ из Kashemir** ✨\n\n`;
+        text += `☕ **Напиток:** ${selectedItem}\n`;
+        text += `👤 **Гостья:** ${fullname}\n`; 
+        text += `👩‍🎨 **Мастер:** ${masterName}\n`; 
+        if (config.sugar) text += `🍬 **Сахар/Добавки:** ${sugar}\n`;
+        if (config.syrup) text += `🍯 **Сироп:** ${syrup}\n`;
+
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = 'ОТПРАВКА...'; btn.disabled = true;
+
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'Markdown' })
+        }).then(res => {
+            btn.innerText = 'ПОДТВЕРДИТЬ'; btn.disabled = false;
+            if (res.ok) {
+                closeModal();
+                playAsmrSound(); 
+                showSuccessAnimation(config.type);
+            }
+        });
+    }
+
+    function sendAdminAlert() {
+        const fullnameInput = document.getElementById('adminCustomerName').value.trim();
+        
+        const nameParts = fullnameInput.split(/\s+/);
+        if (nameParts.length < 2 || nameParts.some(part => part.length < 2)) {
+            alert('Пожалуйста, введите полное ФИО (минимум два слова).');
+            return;
+        }
+
+        localStorage.setItem('kash_name', fullnameInput);
+
+        const masterName = localStorage.getItem('kash_master') || 'Не указан';
+        let text = `🚨 **ВЫЗОВ АДМИНИСТРАТОРА (VIP)** 🚨\n\n👤 **Гостья:** ${fullnameInput}\n👩‍🎨 **Мастер:** ${masterName}\n🛎️ Срочно требуется помощь администратора!`;
+
+        const btn = document.getElementById('callAdminConfirmBtn');
+        btn.innerText = 'ВЫЗОВ...'; btn.disabled = true;
+
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'Markdown' })
+        }).then(res => {
+            btn.innerText = 'ВЫЗОВ'; btn.disabled = false;
+            closeAdminModal();
+            if (res.ok) { alert('Администратор уже спешит к вам! ✨'); }
+        });
+    }
+
+    function generateNewCompliment() {
+        triggerHaptic();
+        const compEl = document.getElementById('magicCompliment');
+        const fortEl = document.getElementById('magicFortune');
+        compEl.style.opacity = 0; fortEl.style.opacity = 0;
+        
+        setTimeout(() => {
+            compEl.innerText = compliments[Math.floor(Math.random() * compliments.length)];
+            fortEl.innerText = fortunes[Math.floor(Math.random() * fortunes.length)];
+            compEl.style.opacity = 1; fortEl.style.opacity = 1;
+        }, 400);
+    }
+
+    function showSuccessAnimation(type) {
+        const iconContainer = document.getElementById('dynamicIcon');
+        if (type === 'hot') {
+            iconContainer.innerHTML = `<div class="hot-icon"><svg viewBox="0 0 24 24"><path class="steam" d="M8 8 C 8 4, 10 4, 10 0" /><path class="steam" d="M12 8 C 12 4, 14 4, 14 0" /><path class="steam" d="M16 8 C 16 4, 18 4, 18 0" /><path d="M4 8 H 20 V 15 C 20 18.3 17.3 21 14 21 H 10 C 6.7 21 4 18.3 4 15 V 8 Z" /><path d="M20 10 H 22 C 23.1 10 24 10.9 24 12 C 24 13.1 23.1 14 22 14 H 20" /></svg></div>`;
+        } else {
+            iconContainer.innerHTML = `<div class="cold-icon"><svg viewBox="0 0 24 24"><path d="M6 4 L 18 4 L 16 22 L 8 22 Z" /><rect class="ice" x="9" y="12" width="4" height="4" /><rect class="ice" x="13" y="16" width="3" height="3" /><path d="M15 4 L 18 0" stroke-width="1.5" /></svg></div>`;
+        }
+
+        generateNewCompliment(); 
+
+        document.getElementById('feedbackTitle').innerText = 'Оцените качество нашего сервиса (1-5 ⭐️)';
+        document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+        document.getElementById('feedbackWidget').style.pointerEvents = 'auto';
+
+        const overlay = document.getElementById('successOverlay');
+        overlay.style.display = 'flex';
+        overlay.scrollTop = 0;
+        setTimeout(() => { overlay.style.opacity = '1'; overlay.classList.add('success-overlay-active'); }, 50);
+
+        initCinematicCanvas();
+
+        let progress = 0;
+        const progressEl = document.getElementById('successProgressBar');
+        progressEl.style.width = '0%';
+        clearInterval(progressInterval);
+        progressInterval = setInterval(() => {
+            progress += (100 / 300); 
+            progressEl.style.width = `${progress}%`;
+            if(progress >= 100) {
+                clearInterval(progressInterval);
+                closeSuccess();
+            }
+        }, 100);
+
+        clearTimeout(successTimeout);
+        successTimeout = setTimeout(() => { closeSuccess(); }, 30000);
+    }
+
+    function initCinematicCanvas() {
         const canvas = document.getElementById('cinematic-canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        let particles = Array.from({length: 30}, () => ({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2}));
-        function animate() {
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            ctx.fillStyle = '#c5a880';
-            particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, 7); ctx.fill(); p.y -= 0.5; if(p.y < 0) p.y = canvas.height; });
-            requestAnimationFrame(animate);
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let particlesArray = [];
+        const numberOfParticles = 30;
+        const particleColor = getComputedStyle(document.body).getPropertyValue('--particle-color').trim();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 4 + 1;
+                this.speedY = (Math.random() * 0.5) - 0.8;
+                this.speedX = (Math.random() * 0.4) - 0.2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                if (this.y < 0) {
+                    this.y = canvas.height;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = particleColor;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
+
+        for (let i = 0; i < numberOfParticles; i++) {
+            particlesArray.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            animationFrameId = requestAnimationFrame(animate);
+        }
+        
+        cancelAnimationFrame(animationFrameId);
         animate();
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    }
+
+    function rateService(rating) {
+        triggerHaptic();
+        const stars = document.querySelectorAll('.star');
+        stars.forEach((s, idx) => {
+            if (idx < rating) s.classList.add('active'); else s.classList.remove('active');
+        });
+
+        const fullname = localStorage.getItem('kash_name') || 'Неизвестная гостья';
+        const masterName = localStorage.getItem('kash_master') || 'Не указан';
+        let text = `⭐️ **ТАЙНЫЙ ОТЗЫВ О СЕРВИСЕ** ⭐️\n\n👤 **Гостья:** ${fullname}\n👩‍🎨 **Мастер:** ${masterName}\n📊 **Оценка сервиса:** ${rating} из 5 звёзд!`;
+
+        document.getElementById('feedbackTitle').innerText = 'Спасибо за вашу оценку! ❤️';
+        document.getElementById('feedbackWidget').style.pointerEvents = 'none';
+
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'Markdown' })
+        });
+    }
+
+    function closeSuccess() {
+        const overlay = document.getElementById('successOverlay');
+        overlay.style.opacity = '0'; overlay.classList.remove('success-overlay-active');
+        clearInterval(progressInterval);
+        cancelAnimationFrame(animationFrameId);
+        setTimeout(() => overlay.style.display = 'none', 500);
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('orderModal')) closeModal();
+        if (event.target == document.getElementById('adminModal')) closeAdminModal();
     }
 </script>
+
 </body>
 </html>
